@@ -9,15 +9,11 @@ const markup = galleryItems
   .join("");
 gallery.insertAdjacentHTML("beforeend", markup);
 
-
-
-const enhanceImg = (event) => {
-  if (event.target.nodeName !== "IMG") {
-    return;
-  }
+document.querySelectorAll('.gallery__image').onclick = (event) => {
   const selectedImg = event.target.dataset.link;
   const alternativeText = event.target.dataset.alt;
-  gallery.insertAdjacentHTML("afterend", `<div class="modal"><img class="modal__image" src="${selectedImg}" alt="${alternativeText}" width="1280" height="853"/></div>`);
-};
+	basicLightbox.create(`
+  <img class="modal__image" src="${selectedImg}" alt="${alternativeText}" width="1280" height="853"/>
+	`).show()
 
-gallery.addEventListener("click", enhanceImg)
+};
