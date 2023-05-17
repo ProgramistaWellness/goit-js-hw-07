@@ -4,16 +4,43 @@ const gallery = document.querySelector(".gallery");
 const markup = galleryItems
   .map(
     (image) =>
-      `<li class="gallery__item"><img class="gallery__image" data-atl = "${image.description}" data-link = "${image.original}" src="${image.preview}" alt="${image.description}" width="719" height="480"/></li>`
+      `<li>
+      <div class="gallery__item">
+      <a class="gallery__link" href="${image.original}">
+        <img
+          class="gallery__image"
+          src="${image.preview}"
+          data-source="${image.original}"
+          alt="${image.description}"
+        />
+      </a>
+    </div>
+    </li>`
   )
   .join("");
 gallery.insertAdjacentHTML("beforeend", markup);
 
-document.querySelectorAll('.gallery__image').onclick = (event) => {
-  const selectedImg = event.target.dataset.link;
-  const alternativeText = event.target.dataset.alt;
-	basicLightbox.create(`
-  <img class="modal__image" src="${selectedImg}" alt="${alternativeText}" width="1280" height="853"/>
-	`).show()
+const createModal = (event) => {
+  event.preventDefault();
+  if(event.target.nodeName !== 'IMG') {
+    return;
+  }
 
-};
+  const instance = basicLightbox.create(
+
+    `<img src="${event.target.dataset.source}">`
+    
+  ).show();
+
+  const visible = basicLightbox.visible();
+  if (visible) {
+    document.addEventListener('keyup', ( {key} ) => {
+      if (key === 'Escape') {
+        instance.close();
+      }
+    });
+  }
+}
+
+Gallery.addEventListener("click", createModal);
+
