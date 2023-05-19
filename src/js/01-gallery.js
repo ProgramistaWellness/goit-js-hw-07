@@ -42,5 +42,5 @@ const createModal = (event) => {
   }
 }
 
-Gallery.addEventListener("click", createModal);
+gallery.addEventListener("click", createModal);
 
