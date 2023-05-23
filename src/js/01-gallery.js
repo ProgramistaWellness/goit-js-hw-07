@@ -20,6 +20,7 @@ const markup = galleryItems
   .join("");
 gallery.insertAdjacentHTML("beforeend", markup);
 
+
 const createModal = (event) => {
   event.preventDefault();
   if(event.target.nodeName !== 'IMG') {
@@ -28,19 +29,29 @@ const createModal = (event) => {
 
   const instance = basicLightbox.create(
 
-    `<img src="${event.target.dataset.source}">`
-    
-  ).show();
+    `<img src="${event.target.dataset.source}">`,
+    {
+      onShow: (instance) => {
+        const handleKeyPress = (event) => {
+          if (event.key === "Escape") {
+            instance.close();
+          }
+        };
 
-  const visible = basicLightbox.visible();
-  if (visible) {
-    document.addEventListener('keyup', ( {key} ) => {
-      if (key === 'Escape') {
-        instance.close();
-      }
-    });
-  }
-}
+        document.addEventListener("keyup", handleKeyPress);
+      },
+      onClose: (instance) => {
+        const handleKeyPress = (event) => {
+          if (event.key === "Escape") {
+            instance.close();
+          }
+        };
 
+        document.removeEventListener("keyup", handleKeyPress);
+      },
+    }
+  );
+  instance.show();
+};
 gallery.addEventListener("click", createModal);
 
